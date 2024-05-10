@@ -37,7 +37,7 @@ public:
     void cmd(string cmd_list) {
         if (cmd_list.find("insert") != string::npos)
         {
-            int arg = stoi(getStringAfterN(cmd_list, " "));
+            int arg = stoi(getStringAfterN(cmd_list, ' '));
             insert_x(arg);
             return
         }
