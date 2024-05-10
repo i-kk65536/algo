@@ -68,9 +68,9 @@ public:
 		insert_prev->next = insert;
     }
     void delete_x(int x) {
-		Element* deleted = &dummmy;
+		Element* deleted = &dummy;
 		bool find_flag = false;
-		while (deleted->next != &dummmy)
+		while (deleted->next != &dummy)
 		{
 			if (x == deleted->data)
 			{
@@ -80,7 +80,7 @@ public:
 			deleted = deleted->next;
 		}
 		if (!find_flag)
-			return
+			return;
 		Element* deleted_prev = deleted->prev;
 		deleted_prev->next = deleted->next;
 		(deleted->next)->prev = deleted_prev;
