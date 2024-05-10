@@ -86,8 +86,8 @@ public:
 		Element* it = dummy.next;
 		while (it != &dummy)
 		{
-			cout << it.data << " ";
-			it = it.next;
+			cout << it->data << " ";
+			it = it->next;
 		}
 		cout << endl;
 	}
@@ -102,7 +102,7 @@ int main(void)
     {
         cin >> cmd_list[i];
     }
-	DoublyLinkedList dll();
+	DoublyLinkedList dll;
 	for (int i = 0; i < num_of_cmd; i++)
 	{
 		dll.cmd(cmd_list[i]);
