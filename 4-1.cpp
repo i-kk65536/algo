@@ -60,7 +60,7 @@ public:
     }
     void insert_x(int x) {
 		Element* insert_prev = &dummy;
-		Element* insert = new Elements();
+		Element* insert = new Element();
 		insert->data = x;
 		insert->next = insert_prev->next;
 		insert->prev = insert_prev;
