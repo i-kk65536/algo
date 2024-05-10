@@ -59,8 +59,8 @@ public:
         }
     }
     void insert_x(int x) {
-		Elements* insert_prev = &dummy;
-		Elements* insert = new Elements();
+		Element* insert_prev = &dummy;
+		Element* insert = new Elements();
 		insert->data = x;
 		insert->next = insert_prev->next;
 		insert->prev = insert_prev;
@@ -68,7 +68,7 @@ public:
 		insert_prev->next = insert;
     }
     void delete_x(int x) {
-		Elements* deleted = &dummmy;
+		Element* deleted = &dummmy;
 		bool find_flag = false;
 		while (deleted->next != &dummmy)
 		{
@@ -81,7 +81,7 @@ public:
 		}
 		if (!find_flag)
 			return
-		Elements* deleted_prev = deleted->prev;
+		Element* deleted_prev = deleted->prev;
 		deleted_prev->next = deleted->next;
 		(deleted->next)->prev = deleted_prev;
 		delete deleted;
