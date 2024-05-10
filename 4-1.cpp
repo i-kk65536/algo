@@ -6,23 +6,6 @@ using namespace std;
 
 string getStringAfterN(const string &s, char delim);
 
-int main(void)
-{
-    int num_of_cmd;
-    cin >> num_of_cmd;
-    string cmd_list[num_of_cmd];
-    for (int i = 0; i < num_of_cmd; i++)
-    {
-        cin >> cmd_list[i];
-    }
-	DoublyLinkedList dll();
-	for (int i = 0; i < num_of_cmd; i++)
-	{
-		dll.cmd(cmd_list[i]);
-	}
-	dll.print();
-}
-
 class Element
 {
 public:
@@ -109,6 +92,23 @@ public:
 		cout << endl;
 	}
 };
+
+int main(void)
+{
+    int num_of_cmd;
+    cin >> num_of_cmd;
+    string cmd_list[num_of_cmd];
+    for (int i = 0; i < num_of_cmd; i++)
+    {
+        cin >> cmd_list[i];
+    }
+	DoublyLinkedList dll();
+	for (int i = 0; i < num_of_cmd; i++)
+	{
+		dll.cmd(cmd_list[i]);
+	}
+	dll.print();
+}
 
 string getStringAfterN(const string &s, char delim) {
     string elems;
