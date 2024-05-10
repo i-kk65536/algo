@@ -97,7 +97,7 @@ public:
 
 string getStringAfterN(const string &s, char delim) {
     string elems;
-    auto it = s.find(s.begin(), s.end(), delim);
+    auto it = find(s.begin(), s.end(), delim);
     it++;
     while (it != s.end())
     {
