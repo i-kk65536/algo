@@ -53,7 +53,7 @@ public:
         }
         if (cmd_list.find("delete") != string::npos)
         {
-            int arg = stoi(getStringAfterN(cmd_list, " "));
+            int arg = stoi(getStringAfterN(cmd_list, ' '));
             delete_x(arg);
             return;
         }
