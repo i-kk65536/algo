@@ -84,7 +84,7 @@ public:
     }
 	void print() {
 		Element* it = dummy.next;
-		while (it != dummy)
+		while (it != &dummy)
 		{
 			cout << it.data << " ";
 			it = it.next;
