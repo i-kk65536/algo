@@ -15,6 +15,12 @@ int main(void)
     {
         cin >> cmd_list[i];
     }
+	DoublyLinkedList dll();
+	for (int i = 0; i < num_of_cmd; i++)
+	{
+		dll.cmd(cmd_list[i]);
+	}
+	dll.print();
 }
 
 class Element
@@ -93,6 +99,15 @@ public:
     void deleteLast() {
 		delete_x(dummy.data);
     }
+	void print() {
+		Element* it = dummy.next;
+		while (it != dummy)
+		{
+			cout << it.data << " ";
+			it = it.next;
+		}
+		cout << endl;
+	}
 };
 
 string getStringAfterN(const string &s, char delim) {
