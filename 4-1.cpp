@@ -39,23 +39,23 @@ public:
         {
             int arg = stoi(getStringAfterN(cmd_list, ' '));
             insert_x(arg);
-            return
+            return;
         }
         if (cmd_list.find("deleteFirst") != string::npos)
         {
             deleteFirst();
-            return
+            return;
         }
         if (cmd_list.find("deleteLast") != string::npos)
         {
             deleteLast();
-            return
+            return;
         }
         if (cmd_list.find("delete") != string::npos)
         {
             int arg = stoi(getStringAfterN(cmd_list, " "));
             delete_x(arg);
-            return
+            return;
         }
     }
     void insert_x(int x) {
@@ -84,13 +84,13 @@ public:
 		Elements* deleted_prev = deleted->prev;
 		deleted_prev->next = deleted->next;
 		(deleted->next)->prev = deleted_prev;
-		delete deleted
+		delete deleted;
     }
     void deleteFirst() {
-		delete_x((dummy.next)->data)
+		delete_x((dummy.next)->data);
     }
     void deleteLast() {
-		delete_x(dummy.data)
+		delete_x(dummy.data);
     }
 };
 
@@ -100,7 +100,7 @@ string getStringAfterN(const string &s, char delim) {
     it++;
     while (it != s.end())
     {
-        elems += *it
+        elems += *it;
         it++;
     }
     return elems;
