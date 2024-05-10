@@ -3,6 +3,8 @@
 #include<vector>
 using namespace std;
 
+string getStringAfterN(const string &s, char delim);
+
 int main(void)
 {
     int num_of_cmd;
@@ -13,6 +15,14 @@ int main(void)
         cin >> cmd_list[i];
     }
 }
+
+class Element
+{
+public:
+    int data;
+    Element* next;
+    Element* prev;
+};
 
 class DoublyLinkedList
 {
@@ -82,15 +92,7 @@ public:
     void deleteLast() {
 		delete_x(dummy.data)
     }
-}
-
-class Element
-{
-public:
-    int data;
-    Element* next;
-    Element* prev;
-}
+};
 
 string getStringAfterN(const string &s, char delim) {
     string elems;
