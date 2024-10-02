@@ -1,4 +1,4 @@
-#include <iosteream>
+#include <iostream>
 #include <string>
 #include <vector>
 using namespace std;
@@ -9,10 +9,13 @@ private:
     string terget;
 
 public:
-    StrFind(string t) : terget(t) {}
+    StrExpand(string t) : terget(t) {}
     vector<int> find(string query)
     {
-        vector<int> match_index();
+        vector<int> match_index;
+        if (query.length() > terget.length())
+            return match_index;
+            
         for (int i = 0; i < terget.length() - (query.length() - 1); i++)
         {
             int pos_t = 0;
@@ -35,10 +38,10 @@ public:
 int main()
 {
     string t, q;
-    cin >> t >> q:
+    cin >> t >> q;
 
     StrExpand terget(t);
-    vector<int> match_index = terget.find(p);
+    vector<int> match_index = terget.find(q);
 
     for (const auto& e : match_index)
     {
