@@ -12,15 +12,17 @@ public:
     StrFind(string t) : terget(t) {}
     vector<int> find(string query)
     {
-        for (int pos_t = 0; pos_t < terget.length() - query.length() + 1; pos_t++)
+        for (int i = 0; i < terget.length() - (query.length() - 1); i++)
         {
+            int pos_t = 0;
             int pos_q = 0;
-            while (terget[pos_t] == query[pos_q])
+            while (terget[i + pos_t] == query[pos_q])
             {
                 if (query.length() - 1 == pos_q)
                 {
-                    return pos_t;
+                    return i;
                 }
+                pos_t++;
                 pos_q++;
             }
         }
