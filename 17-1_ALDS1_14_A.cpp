@@ -12,6 +12,7 @@ public:
     StrFind(string t) : terget(t) {}
     vector<int> find(string query)
     {
+        vector<int> match_index();
         for (int i = 0; i < terget.length() - (query.length() - 1); i++)
         {
             int pos_t = 0;
@@ -20,12 +21,14 @@ public:
             {
                 if (query.length() - 1 == pos_q)
                 {
-                    return i;
+                    match_index.emplace_back(i);
+                    break;
                 }
                 pos_t++;
                 pos_q++;
             }
         }
+        return match_index;
     }
 };
 
@@ -37,8 +40,6 @@ int main()
     StrExpand terget(t);
     vector<int> match_index = terget.find(p);
 
-    if (!match_index)
-        return;
     for (const auto& e : match_index)
     {
         cout << e << endl;
