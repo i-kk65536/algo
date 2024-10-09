@@ -36,7 +36,7 @@ public:
 };
 
 int main()
-[
+{
     string text, query;
     cin >> text >> query;
 
@@ -47,4 +47,4 @@ int main()
     {
         cout << e << endl;
     }
-]
+}
