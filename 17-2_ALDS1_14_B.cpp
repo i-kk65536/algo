@@ -3,26 +3,26 @@
 #include <vector>
 using namespace std;
 
-class StrExpand
+class StrKMP
 {
 private:
-    string terget;
+    string text;
 
 public:
-    StrExpand(string t) : terget(t) {}
-    vector<int> find(string query)
+    StrKMP(const string& t) : text(t) {}
+    vector<int> find(const string& query)
     {
         vector<int> match_index;
-        if (query.length() > terget.length())
+        if (query.length() > text.length())
             return match_index;
             
-        for (int i = 0; i < terget.length() - (query.length() - 1); i++)
+        for (int i = 0; i < text.length() - (query.length() - 1); i++)
         {
-            int pos_t = 0;
+            int pos_t = i;
             int pos_q = 0;
-            while (terget[i + pos_t] == query[pos_q])
+            while (text[pos_t] == query[pos_q])
             {
-                if (query.length() - 1 == pos_q)
+                if (pos_q == query.length() - 1)
                 {
                     match_index.emplace_back(i);
                     break;
@@ -36,15 +36,15 @@ public:
 };
 
 int main()
-{
-    string t, q;
-    cin >> t >> q;
+[
+    string text, query;
+    cin >> text >> query;
 
-    StrExpand terget(t);
-    vector<int> match_index = terget.find(q);
+    StrKMP terget(text);
+    vector<int> match_index = terget.find(query);
 
     for (const auto& e : match_index)
     {
         cout << e << endl;
     }
-}
+]
