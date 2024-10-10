@@ -17,33 +17,24 @@ public:
             return match_index;
         
         vector<int> table = createPartialMatchTable(query);
-        int pos_t = 0;
-        int pos_q = 0;
-        while (pos_t < text.length())
-        {
-            if (query[pos_q] == text[pos_t])
-            {
-                pos_t++;
-                pos_q++;
-            }
-            if (pos_q == query.length() - 1)
-            {
-                match_index.emplace_back(pos_t - pos_q);
-                pos_q = table[pos_q - 1];
-            }
-            else if (pos_t < text.length() && query[pos_q] != text[pos_t])
-            {
-                if (pos_q != 0)
-                {
-                    pos_q = table[pos_q - 1];
-                }
-                else
-                {
-                    pos_t++;
-                }
-            }
-        }
-        return match_index;
+		int top_pos = 0;
+		int top_diff = 0;
+    	while (top_pos + top_diff < text.length())
+		{
+        	if (text[top_pos + top_diff] == query[top_diff])
+			{
+        		top_diff++;
+        		if (top_diff == query.length())
+         	       match_index.emplace_back(top_pos);
+			}
+        	else
+			{
+       	    	top_pos = top_pos + top_diff - table[top_diff];
+      	 		if (j > 0)
+   	  	           j = table[j];
+			}
+		}
+    	return match_index;
     }
     vector<int> createPartialMatchTable(const string& query)
     {
