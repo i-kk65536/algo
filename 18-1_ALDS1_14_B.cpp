@@ -48,31 +48,15 @@ public:
     vector<int> createPartialMatchTable(const string& query)
     {
         vector<int> table(query.length());
-        int prefix_length = 0;
-        table[0] = 0;
-        int i = 1;
-
-        while (i < query.length())
-        {
-            if (query[i] == query[prefix_length])
+        table[0] = -1
+        int j = -1
+        for (int i = 0; i < query.length(); i++)
+            while (j >= 0 && t[i] != t[j])
             {
-                prefix_length++;
-                table[i] = prefix_length;
-                i++;
+                j = table[j];
             }
-            else
-            {
-                if (prefix_length != 0)
-                {
-                    prefix_length = table[prefix_length - 1];
-                }
-                else
-                {
-                    table[i] = 0;
-                    i++;
-                }
-            }
-        }
+            table[i + 1] = j + 1;
+            j++;
         return table;
     }
 };
