@@ -3,56 +3,30 @@
 #pragma GCC optimize("unroll-loops")
 
 #include <iostream>
-#include <cctype>
-#include <cstdio>
-#include <utility>
 #include <string>
 #include <vector>
 using namespace std;
-
-class IO {
-public:
-    static inline void read(string &s)
-    {
-        for (char c; !isspace(c = getchar_unlocked()); s += c);
-    }
-    static inline void write(int n)
-    {
-        static char buf[20];
-        char *p = buf;
-        while (n)
-        {
-            *p++ = n % 10 + '0';
-            n /= 10;
-        }
-        while (p != buf)
-        {
-            putchar_unlocked(*--p);
-        }
-    }
-    static inline void write(char c)
-    {
-        putchar_unlocked(c);
-    }
-};
 
 void createPartialMatchTable(const string& query, vector<int>& table)
 {
     int query_length = query.length();
     table[0] = -1;
     int j = -1;
-    for (int i = 0; i < query_length - 1; i++)
+    for (int i = 1; i < query_length; i++)
     {
-        while (j >= 0 && query[i] != query[j])
+        while (j >= 0 && query[i] != query[j + 1])
         {
             j = table[j];
         }
-        table[i + 1] = j + 1;
-        j++;
+        if (query[i] == query[j + 1])
+        {
+            j++;
+        }
+        table[i] = j;
     }
 }
 
-void KMPfind(const string& text, const string& query)
+void MPfind(const string& text, const string& query)
 {
     int text_length = text.length();
     int query_length = query.length();
@@ -61,38 +35,30 @@ void KMPfind(const string& text, const string& query)
     
     vector<int> table(query_length);
     createPartialMatchTable(query, table);
-    int top_pos = 0;
-    int top_diff = 0;
-    while (top_pos + top_diff < text_length)
+    int text_pos = 0;
+    int top_diff = -1;
+    for (; text_pos < text_length; text_pos++)
     {
-        if (text[top_pos + top_diff] == query[top_diff])
+        while (top_diff >= 0 && text[text_pos] != query[top_diff + 1])
+        {
+            top_diff = table[top_diff];
+        }
+        if (text[text_pos] == query[top_diff + 1])
         {
             top_diff++;
-            if (top_diff == query_length)
-            {
-                IO::write(top_pos);
-                IO::write('\n');
-                top_pos++;
-                top_diff = 0;
-            }
         }
-        else
+        if (top_diff == query_length - 1)
         {
-            top_pos = top_pos + top_diff - table[top_diff];
-            if (top_diff > 0)
-                top_diff = table[top_diff];
+            cout << text_pos - (query_length - 1) << '\n';
+            top_diff = table[top_diff];
         }
     }
 }
 
 int main()
 {
-    std::ios::sync_with_stdio(false);
-    std::cin.tie(nullptr);
-
     string text, query;
-    IO::read(text);
-    IO::read(query);
+    cin >> text >> query;
 
-    KMPfind(text, query);
+    MPfind(text, query);
 }
