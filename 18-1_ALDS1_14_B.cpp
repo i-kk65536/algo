@@ -7,15 +7,20 @@ class StrKMP
 {
 private:
     string text;
-
-public:
-    StrKMP(const string& t) : text(t) {}
-    vector<int> find(const string& query)
+    vector<int> normalFind(const string& query)
+    {
+		for (int i = 0; i <= text.size() - query.size(); i++)
+        {
+			if (query == text.substr(i, query.size()))
+            {
+				cout << i << endl;
+			}
+        }
+        return vector<int>();
+    }
+    vector<int> KMPFind(const string& query)
     {
         vector<int> match_index;
-        if (query.length() > text.length())
-            return match_index;
-        
         vector<int> table = createPartialMatchTable(query);
 		int top_pos = 0;
 		int top_diff = 0;
@@ -55,6 +60,21 @@ public:
             j++;
         }
         return table;
+    }
+
+public:
+    StrKMP(const string& t) : text(t) {}
+    vector<int> find(const string& query)
+    {
+        vector<int> match_index;
+        if (query.length() > text.length())
+            return match_index;
+        
+        if (query.length() == 1)
+            match_index = normalFind(query);
+        else
+            match_index = KMPFind(query);
+        return match_index;
     }
 };
 
