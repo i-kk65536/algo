@@ -10,13 +10,13 @@ private:
 
 public:
     StrKMP(const string& t) : text(t) {}
-    vector<int> find(const string& query, vector<int>& match_index)
+    vector<int> find(const string& query)
     {
+        vector<int> match_index;
         if (query.length() > text.length())
-            return;
+            return match_index;
         
-        vector<int> table(query.length());
-        createPartialMatchTable(query, table);
+        vector<int> table = createPartialMatchTable(query);
 		int top_pos = 0;
 		int top_diff = 0;
     	while (top_pos + top_diff < text.length())
@@ -38,9 +38,11 @@ public:
    	  	           top_diff = table[top_diff];
 			}
 		}
+        return match_index;
     }
-    vector<int> createPartialMatchTable(const string& query, vector<int>& table)
+    vector<int> createPartialMatchTable(const string& query)
     {
+        vector<int> table(query.length());
         table[0] = -1;
         int j = -1;
         for (int i = 0; i < query.length() - 1; i++)
@@ -62,8 +64,7 @@ int main()
     cin >> text >> query;
 
     StrKMP terget(text);
-    vector<int> match_index;
-    terget.find(query, match_index);
+    vector<int> match_index = terget.find(query);
 
     for (const auto& e : match_index)
     {
