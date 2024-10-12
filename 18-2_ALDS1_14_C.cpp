@@ -3,6 +3,15 @@
 #include <vector>
 using namespace std;
 
+struct Point
+{
+public:
+    int x;
+    int y;
+
+    Point(const int& x, const int& y) : x(x), y(y) {}
+};
+
 class StrMP
 {
 private:
@@ -26,6 +35,11 @@ private:
             table[i] = j;
         }
     }
+
+public:
+    StrMP() {}
+    StrMP(const string& text) : text(text) {}
+
     void find(const string& query)
     {
         int text_length = text.length();
@@ -54,11 +68,20 @@ private:
             }
         }
     }
-public:
-    StrMP() {}
-    StrMP(const string& text) : text(text) {}
+};
 
-    void find2d(const vector<StrMP>& query)
+class StrMP2d
+{
+private:
+    vector<StrMP> field;
+
+public:
+    StrMP2d(size_t size) : field(size) {}
+    void insert(const string& text, const int& index)
+    {
+        field.at(index) = StrMP(text);
+    }
+    vector<Point> find(const vector<string>& query)
     {
 
     }
@@ -66,24 +89,24 @@ public:
 
 int main()
 {
-    int text_height, text_width;
-    cin >> text_height >> text_width;
-    vector<StrMP> field(text_height);
-    for (auto& strmp : field)
+    int terget_height, terget_width;
+    cin >> terget_height >> terget_width;
+    StrMP2d terget(terget_height);
+    for (int i = 0; i < terget_height; i++)
     {
         string text;
         cin >> text;
-        strmp = StrMP(text);
+        terget.insert(text, i);
     }
     int query_height, query_width;
     cin >> query_height >> query_width;
-    vector<StrMP> pattern(text_height);
-    for (auto& strmp : pattern)
+    vector<string> query(query_height);
+    for (auto& strmp : query)
     {
-        string text;
-        cin >> text;
-        strmp = StrMP(text);
+        cin >> strmp;
     }
 
-    field.find2d(pattern);
+    vector<Point> match_index = terget.find(query);
+    for (const auto& e : match_index)
+        cout << e.x << " " << e.y << endl;
 }

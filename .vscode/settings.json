@@ -5,6 +5,9 @@
         "iostream": "cpp",
         "xlocale": "cpp",
         "cstdio": "cpp",
-        "string": "cpp"
+        "string": "cpp",
+        "array": "cpp",
+        "deque": "cpp",
+        "xlocmon": "cpp"
     }
 }
