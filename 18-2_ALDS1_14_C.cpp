@@ -96,7 +96,7 @@ public:
         vector<Point> match_index;
         int query_height = query.size();
         int query_width = query[0].length();
-        for (int i = 0; i < terget_height - query_height - 1; i++)
+        for (int i = 0; i < terget_height - query_height + 1; i++)
         {
             vector<int> match_top = field[i].find(query[0]);
             if (!match_top.empty())
