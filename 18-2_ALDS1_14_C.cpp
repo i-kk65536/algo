@@ -84,16 +84,13 @@ private:
 
 public:
     StrMP2d(int height) : field(height), terget_height(height) {}
-    using iterator = vector<StrMP>::iterator;
-    using const_iterator = vector<StrMP>::const_iterator;
-    iterator begin() { return field.begin(); }
-    iterator end() { return field.end(); }
-    const_iterator begin() const { return field.begin(); }
-    const_iterator end() const { return field.end(); }
 
-    vector<Point> find(const vector<string>& query)
+    void insert(const string& text, const int& index)
     {
-        vector<Point> match_index;
+        field.at(index) = StrMP(text);
+    }
+    void find(const vector<string>& query)
+    {
         int query_height = query.size();
         int query_width = query[0].length();
         for (int i = 0; i < terget_height - query_height + 1; i++)
@@ -101,25 +98,39 @@ public:
             vector<int> match_top = field[i].find(query[0]);
             if (!match_top.empty())
             {
-                for (int& match_pos : match_top)
+                bool previous_match = false;
+                for (int k = 0; k < match_top.size(); k++)
                 {
                     bool match = true;
                     for (int j = 1; j < query_height; j++)
                     {
-                        if (field[i + j].substr(match_pos, query_width) != query[j])
+                        int diff_prev = (k > 0 ? match_top[k - 1] + query_width - match_top[k] : 0);
+                        if (previous_match && diff_prev > 0)
                         {
-                            match = false;
-                            break;
+                            previous_match = false;
+                            if (field[i + j].substr(match_top[k] + diff_prev, query_width - diff_prev) != query[j].substr(diff_prev))
+                            {
+                                match = false;
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            if (field[i + j].substr(match_top[k], query_width) != query[j])
+                            {
+                                match = false;
+                                break;
+                            }
                         }
                     }
                     if (match)
                     {
-                        match_index.emplace_back(Point(i, match_pos));
+                        cout << i << " " << match_top[k] << endl;
+                        previous_match = true;
                     }
                 }
             }
         }
-        return match_index;
     }
 };
 
@@ -128,11 +139,11 @@ int main()
     int terget_height, terget_width;
     cin >> terget_height >> terget_width;
     StrMP2d terget(terget_height);
-    for (StrMP& row : terget)
+    for (int i = 0; i < terget_height; i++)
     {
         string str;
         cin >> str;
-        row = StrMP(str);
+        terget.insert(str, i);
     }
     int query_height, query_width;
     cin >> query_height >> query_width;
@@ -142,7 +153,5 @@ int main()
         cin >> row;
     }
 
-    vector<Point> match_index = terget.find(query);
-    for (const auto& point : match_index)
-        cout << point.x << " " << point.y << endl;
+    terget.find(query);
 }
