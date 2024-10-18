@@ -1,44 +1,41 @@
 #include <iostream>
-#include <string>
 #include <vector>
+#include <string>
 using namespace std;
-using ull = unsigned long long;
-
-struct Point
-{
-public:
-    int x;
-    int y;
-
-    Point(const int& x, const int& y) : x(x), y(y) {}
-};
-
-class Hash2d
-{
-private:
-    vector<vector<ull>> field;
-public:
-    Hash2d() {}
-};
-
-int main()
-{
-    int terget_height, terget_width;
-    cin >> terget_height >> terget_width;
-    vector<string> terget_raw(terget_height);
-    for (string& row : terget_raw)
-    {
-        cin >> row;
+ 
+int main() {
+    int H, W;
+    cin >> H >> W;
+    vector<string> field(H);
+ 
+    for (int i = 0; i < H; ++i) {
+        cin >> field[i];
     }
-    int query_height, query_width;
-    cin >> query_height >> query_width;
-    vector<string> query_raw(query_height);
-    for (string& row : query_raw)
-    {
-        cin >> row;
+ 
+    int R, C;
+    cin >> R >> C;
+    vector<string> pattern(R);
+ 
+    for (int i = 0; i < R; ++i) {
+        cin >> pattern[i];
     }
-
-    Hash2d terget(terget_raw, query_height, query_width);
-    Hash2d query(query_raw, query_height, query_width);
-    terget.find(query);
+ 
+    for (int i = 0; i <= H - R; ++i) {
+        for (int j = 0; j <= W - C; ++j) {
+            bool match = true;
+ 
+            for (int k = 0; k < R; ++k) {
+                if (field[i + k].compare(j, C, pattern[k]) != 0) {
+                    match = false;
+                    break;
+                }
+            }
+ 
+            if (match) {
+                cout << i << " " << j << endl;
+            }
+        }
+    }
+ 
+    return 0;
 }
