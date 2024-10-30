@@ -1,75 +1,82 @@
 #include <iostream>
-#include <string>
 #include <vector>
-#include <algorithm>
+#include <climits>
 using namespace std;
 
-class StrBM
-{
-private:
-    string target;
-
-    vector<int> createBadCharTable(const string& query)
-    {
-        const int ALPHABET_SIZE = 256;
-        vector<int> badCharTable(ALPHABET_SIZE, -1);
-
-        for (int i = 0; i < query.size(); i++)
-        {
-            badCharTable[static_cast<int>(query[i])] = i;
-        }
-
-        return badCharTable;
-    }
-
-public:
-    StrBM(string t) : target(t) {}
-
-    vector<int> find(const string& query)
-    {
-        vector<int> match_index;
-        int n = target.size();
-        int m = query.size();
-
-        if (m > n)
-            return match_index;
-
-        vector<int> badCharTable = createBadCharTable(query);
-
-        int shift = 0;
-        while (shift <= (n - m))
-        {
-            int j = m - 1;
-
-            while (j >= 0 && query[j] == target[shift + j])
-            {
-                j--;
-            }
-
-            if (j < 0)
-            {
-                match_index.emplace_back(shift);
-                shift += (shift + m < n) ? m - badCharTable[static_cast<int>(target[shift + m])] : 1;
-            }
-            else
-            {
-                shift += max(1, j - badCharTable[static_cast<int>(target[shift + j])]);
-            }
-        }
-        return match_index;
-    }
-};
+int mergeSort(vector<int>& list, size_t left, size_t right_next);
+int merge(vector<int>& list, size_t left, size_t mid, size_t right_next);
 
 int main()
 {
-    string t, q;
-    cin >> t >> q;
-
-    StrBM target(t);
-    vector<int> match_index = target.find(q);
-
-    for (const auto& e : match_index)
+    size_t size;
+    cin >> size;
+    vector<int> list(size);
+    for (int i = 0; i < size; i++)
     {
-        cout << e << endl;
+        cin >> list[i];
     }
+    
+    int comparison_times = mergeSort(list, 0, size);
+    
+    for (int i = 0; i < size; i++)
+    {
+        cout << list[i];
+        if (i != size - 1)
+            cout << " ";
+        else
+            cout << endl;
+    }
+    cout << comparison_times << endl;
+}
+
+int merge(vector<int>& list, size_t left, size_t mid, size_t right_next)
+{
+    size_t end_L = mid - left;
+    size_t end_R = right_next - mid;
+    vector<int> list_L(end_L + 1);
+    vector<int> list_R(end_R + 1);
+    for (int i = 0; i < end_L; i++)
+    {
+        list_L[i] = list[left + i];
+    }
+    for (int i = 0; i < end_R; i++)
+    {
+        list_R[i] = list[mid + i];
+    }
+    list_L[end_L] = INT_MAX;
+    list_R[end_R] = INT_MAX;
+
+    size_t index_L = 0;
+    size_t index_R = 0;
+    int comparison_times = 0;
+    for (int i = left; i < right_next; i++)
+    {
+        if (list_L[index_L] <= list_R[index_R])
+        {
+            list[i] = list_L[index_L];
+            index_L++;
+        }
+        else
+        {
+            list[i] = list_R[index_R];
+            index_R++;
+        }
+        comparison_times++;
+    }
+    return comparison_times;
+}
+
+int mergeSort(vector<int>& list, size_t left, size_t right_next)
+{
+    int comparison_times = 0;
+    if (!(left + 1 < right_next))
+    {
+        return comparison_times;
+    }
+    
+    size_t mid = (left + right_next) / 2;
+    comparison_times += mergeSort(list, left, mid);
+    comparison_times += mergeSort(list, mid, right_next);
+    comparison_times += merge(list, left, mid, right_next);
+    return comparison_times;
 }
