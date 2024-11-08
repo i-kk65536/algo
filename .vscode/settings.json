@@ -9,6 +9,7 @@
         "array": "cpp",
         "deque": "cpp",
         "xlocmon": "cpp",
-        "xutility": "cpp"
+        "xutility": "cpp",
+        "cmath": "cpp"
     }
 }
