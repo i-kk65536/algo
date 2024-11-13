@@ -2,7 +2,6 @@
 #include <iomanip>
 #include <deque>
 #include <utility>
-#include <functional>
 #include <cmath>
 using namespace std;
 
@@ -21,10 +20,12 @@ public:
         double cos_val = cos(rad);
         double sin_val = sin(rad);
 
-        Point translated = *this - origin;
-        double new_x = translated.x * cos_val - translated.y * sin_val;
-        double new_y = translated.x * sin_val + translated.y * cos_val;
-        return Point(new_x, new_y) + origin;
+        Point translated(*this - origin);
+        Point rotated(
+            translated.x * cos_val - translated.y * sin_val,
+            translated.x * sin_val + translated.y * cos_val
+        );
+        return rotated + origin;
     }
     void Print() const
     {
@@ -75,24 +76,24 @@ deque<Point> KochCurve(const Point& left, const Point& right, const int& depth)
 {
     deque<Point> coordinate;
 
-    function<void(const Point&, const Point&, int)> helper = [&](const Point& A, const Point& E, int depth) {
+    auto helper = [&coordinate](auto self, const Point& A, const Point& E, int depth) -> void {
         if (depth == 0)
             return;
 
         auto [B, D] = Trisection(A, E);
         Point C = CalculateTriangleTop(B, D);
 
-        helper(A, B, depth - 1);
+        self(self, A, B, depth - 1);
         coordinate.emplace_back(B);
-        helper(B, C, depth - 1);
+        self(self, B, C, depth - 1);
         coordinate.emplace_back(C);
-        helper(C, D, depth - 1);
+        self(self, C, D, depth - 1);
         coordinate.emplace_back(D);
-        helper(D, E, depth - 1);
+        self(self, D, E, depth - 1);
     };
 
     coordinate.emplace_front(left);
-    helper(left, right, depth);
+    helper(helper, left, right, depth);
     coordinate.emplace_back(right);
 
     return coordinate;
