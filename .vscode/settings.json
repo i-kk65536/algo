@@ -10,6 +10,7 @@
         "deque": "cpp",
         "xlocmon": "cpp",
         "xutility": "cpp",
-        "cmath": "cpp"
+        "cmath": "cpp",
+        "stack": "cpp"
     }
 }

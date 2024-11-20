@@ -1,6 +1,20 @@
 #include <iostream>
 #include <vector>
+#include <stack>
 using namespace std;
+
+struct Search
+{
+    int id;
+    int begin_time;
+    int end_time;
+
+    Search (const int& id=0, const int& begin_time=0, const int& end_time=0) : id(id), begin_time(begin_time), end_time(end_time) {}
+    void Print()
+    {
+        cout << id << " " << begin_time << " " << end_time << endl;
+    }
+};
 
 class Graph
 {
@@ -9,19 +23,14 @@ private:
     {
         int id;
         vector<int> adjacency_list;
-        int begin_time;
-        int end_time;
-        bool finded = false;
 
         Node(const int& id=0, const vector<int>& adjacency_list={}) : id(id), adjacency_list(adjacency_list) {}
     };
 
     vector<Node> graph;
-    vector<int> begin_time;
-    vector<int> end_time;
 
 public:
-    Graph(const int& num) : graph(num), begin_time(num), end_time(num) {}
+    Graph(const int& num) : graph(num) {}
     void input()
     {
         for (Node& node: graph)
@@ -34,17 +43,49 @@ public:
                 cin >> adjacency;
         }
     }
-    Graph& DFS()
+    stack<Search> DFS()
     {
-        return *this;
-    }
-    void print()
-    {
-        for (const Node& node: graph)
-            cout << node.id << " " << node.begin_time << " " << node.end_time;
+        stack<Search> result;
+        vector<bool> visited(graph.size(), false);
+        int time = 0;
+
+        for (int i = 0; i < graph.size(); i++)
+        {
+            if (visited[i])
+            {
+                break;
+            }
+
+            stack<int> stack;
+            stack.push(i);
+            while (!stack.empty())
+            {
+                int u = stack.top();
+                stack.pop();
+
+                if (!visited[u])
+                {
+                    visited[u] = true;
+                    time++;
+                    result.push(Search(graph[u].id, time));
+
+                    for (int e: graph[u].adjacency_list)
+                    {
+                        if (!visited[e])
+                        {
+                            stack.push(e);
+                        }
+                    }
+
+                    time++;
+                    result.top().end_time = time;
+                }
+            }
+        }
+
+        return result;
     }
 };
-
 
 int main()
 {
@@ -53,5 +94,10 @@ int main()
     Graph graph(node_num);
     graph.input();
 
-    graph.DFS().print();
+    auto result = graph.DFS();
+    while (!result.empty())
+    {
+        result.top().Print();
+        result.pop();
+    }
 }
