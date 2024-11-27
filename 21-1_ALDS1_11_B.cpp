@@ -3,87 +3,69 @@
 #include <stack>
 using namespace std;
 
+struct Node
+{
+    int id;
+    vector<int> adjacency_list;
+
+    Node(const int& id=0, const vector<int>& adjacency_list={}) : id(id), adjacency_list(adjacency_list) {}
+};
 struct Search
 {
     int id;
-    int begin_time;
+    int start_time;
     int end_time;
 
-    Search (const int& id=0, const int& begin_time=0, const int& end_time=0) : id(id), begin_time(begin_time), end_time(end_time) {}
-    void Print()
+    Search (const int& id=0, const int& start_time=0, const int& end_time=0) : id(id), start_time(start_time), end_time(end_time) {}
+    void Print() const
     {
-        cout << id << " " << begin_time << " " << end_time << endl;
+        cout << id << " " << start_time << " " << end_time << endl;
     }
 };
 
 class Graph
 {
 private:
-   struct Node
-    {
-        int id;
-        vector<int> adjacency_list;
-
-        Node(const int& id=0, const vector<int>& adjacency_list={}) : id(id), adjacency_list(adjacency_list) {}
-    };
-
     vector<Node> graph;
+
+    void DFSVisit(int node, int& time, vector<bool>& visited, vector<Search>& search_result)
+    {
+        visited[node] = true;
+        search_result[node].id = node + 1;
+        search_result[node].start_time = ++time;
+
+        for (int adjacency : graph[node].adjacency_list)
+        {
+            if (!visited[adjacency - 1])
+            {
+                DFSVisit(adjacency - 1, time, visited, search_result);
+            }
+        }
+
+        search_result[node].end_time = ++time;
+    }
 
 public:
     Graph(const int& num) : graph(num) {}
-    void input()
+    void insert(const Node& node)
     {
-        for (Node& node: graph)
-        {
-            cin >> node.id;
-            int outdegree;
-            cin >> outdegree;
-            node.adjacency_list.resize(outdegree);
-            for (int& adjacency: node.adjacency_list)
-                cin >> adjacency;
-        }
+        graph[node.id - 1] = node;
     }
-    stack<Search> DFS()
+    vector<Search> DFS()
     {
-        stack<Search> result;
+        vector<Search> search_result(graph.size());
         vector<bool> visited(graph.size(), false);
         int time = 0;
 
         for (int i = 0; i < graph.size(); i++)
         {
-            if (visited[i])
+            if (!visited[i])
             {
-                break;
-            }
-
-            stack<int> stack;
-            stack.push(i);
-            while (!stack.empty())
-            {
-                int u = stack.top();
-                stack.pop();
-
-                if (!visited[u])
-                {
-                    visited[u] = true;
-                    time++;
-                    result.push(Search(graph[u].id, time));
-
-                    for (int e: graph[u].adjacency_list)
-                    {
-                        if (!visited[e])
-                        {
-                            stack.push(e);
-                        }
-                    }
-
-                    time++;
-                    result.top().end_time = time;
-                }
+                DFSVisit(i, time, visited, search_result);
             }
         }
 
-        return result;
+        return search_result;
     }
 };
 
@@ -92,12 +74,18 @@ int main()
     int node_num;
     cin >> node_num;
     Graph graph(node_num);
-    graph.input();
-
-    auto result = graph.DFS();
-    while (!result.empty())
+    for (int i = 0; i < node_num; i++)
     {
-        result.top().Print();
-        result.pop();
+        int id, outdegree;
+        cin >> id >> outdegree;
+        vector<int> adjacency_list(outdegree);
+        for (int& adjacency : adjacency_list)
+            cin >> adjacency;
+        graph.insert(Node(id, adjacency_list));
+    }
+
+    for (const Search& search: graph.DFS())
+    {
+        search.Print();
     }
 }
