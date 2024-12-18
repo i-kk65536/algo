@@ -1,29 +1,70 @@
 #include <iostream>
 #include <vector>
+#include <algorithm>
 using namespace std;
 
 class Graph
 {
 private:
-    vector<vector<int>> graph;
+    int vertices;
+    vector<vector<int>> adjList;
+    vector<int> discoveryTime, low, parent;
+    vector<bool> visited, articulationPoint;
+    int time;
+
+    void DFS(int u)
+    {
+        int children = 0;
+        visited[u] = true;
+        discoveryTime[u] = low[u] = ++time;
+
+        for (int v : adjList[u])
+        {
+            if (!visited[v])
+            {
+                children++;
+                parent[v] = u;
+                DFS(v);
+
+                low[u] = min(low[u], low[v]);
+
+                if (parent[u] == -1 && children > 1)
+                    articulationPoint[u] = true;
+                if (parent[u] != -1 && low[v] >= discoveryTime[u])
+                    articulationPoint[u] = true;
+            }
+            else if (v != parent[u])
+            {
+                low[u] = min(low[u], discoveryTime[v]);
+            }
+        }
+    }
 
 public:
-    Graph(const int& num) : graph(num) {}
-    void insert(const int& v1, const int& v2)
+    Graph(int vertices) : vertices(vertices), adjList(vertices), time(0), parent(vertices, -1), visited(vertices, false), articulationPoint(vertices, false), discoveryTime(vertices, -1), low(vertices, -1) {}
+
+    void addEdge(int u, int v)
     {
-        graph[v1 - 1].push_back(v2);
-        graph[v2 - 1].push_back(v1);
+        adjList[u].push_back(v);
+        adjList[v].push_back(u);
     }
-    void Print() const
+
+    void findArticulationPoints()
     {
-        for (const Node& node : graph)
+        for (int i = 0; i < vertices; i++)
         {
-            cout << node.id;
-            for (int adjacency : node.adjacency_list)
+            if (!visited[i])
             {
-                cout << " " << adjacency;
+                DFS(i);
             }
-            cout << endl;
+        }
+
+        for (int i = 0; i < vertices; i++)
+        {
+            if (articulationPoint[i])
+            {
+                cout << i << endl;
+            }
         }
     }
 };
@@ -32,18 +73,16 @@ int main()
 {
     int vertices, edges;
     cin >> vertices >> edges;
-
     Graph graph(vertices);
 
     for (int i = 0; i < edges; i++)
     {
-        int v1, v2;
-        cin >> v1 >> v2;
-
-        graph.insert(v1, v2);
+        int u, v;
+        cin >> u >> v;
+        graph.addEdge(u, v);
     }
 
-    graph.Print();
+    graph.findArticulationPoints();
 
     return 0;
 }
