@@ -1,0 +1,58 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <limits>
+
+using namespace std;
+
+const int INF = numeric_limits<int>::max();
+
+struct Edge {
+    int to, cost;
+};
+
+void dijkstra(int start, vector<vector<Edge>>& graph, vector<int>& dist) {
+    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
+    dist[start] = 0;
+    pq.push({0, start});
+
+    while (!pq.empty()) {
+        int d = pq.top().first;
+        int u = pq.top().second;
+        pq.pop();
+
+        if (d > dist[u]) continue;
+
+        for (const Edge& e : graph[u]) {
+            if (dist[u] + e.cost < dist[e.to]) {
+                dist[e.to] = dist[u] + e.cost;
+                pq.push({dist[e.to], e.to});
+            }
+        }
+    }
+}
+
+int main() {
+    int n;
+    cin >> n;
+    vector<vector<Edge>> graph(n);
+
+    for (int i = 0; i < n; ++i) {
+        int u, k;
+        cin >> u >> k;
+        for (int j = 0; j < k; ++j) {
+            int v, c;
+            cin >> v >> c;
+            graph[u].push_back({v, c});
+        }
+    }
+
+    vector<int> dist(n, INF);
+    dijkstra(0, graph, dist);
+
+    for (int i = 0; i < n; ++i) {
+        cout << i << " " << dist[i] << endl;
+    }
+
+    return 0;
+}
