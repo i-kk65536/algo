@@ -28,7 +28,7 @@ int leven_shtein_distance(const string& r, const string& c)
         }
     }
 
-    return dp[row.length() - 1][column.length() - 1];
+    return dp.back().back();
 }
 
 int main()
